@@ -30,29 +30,29 @@
             CONCAT(p.menu_name, p.permission_name) permissionName
         FROM (
                  SELECT
-                     id                                      userId,
+                     id                                      "userId",
                      username                                username,
                      nickname                                nickname,
-                     role_id                                 roleId,
-                     delete_status                           deleteStatus,
-                     DATE_FORMAT(create_time, '%Y.%m.%d %T') createTime,
-                     DATE_FORMAT(update_time, '%Y.%m.%d %T') updateTime
+                     role_id                                 "roleId",
+                     delete_status                           "deleteStatus",
+                     to_char(create_time, 'YYYY.mm.dd') "createTime",
+                     to_char(update_time, 'YYYY.mm.dd') "updateTime"
                  FROM sys_user
                  WHERE delete_status = '1'
                  ORDER BY id
                  LIMIT #{offSet}, #{pageRow}
              ) u
-            LEFT JOIN sys_role r ON r.id = u.roleId
+            LEFT JOIN sys_role r ON r.id = u."roleId"
             LEFT JOIN sys_role_permission rp ON rp.role_id = r.id
             LEFT JOIN sys_permission p ON p.id = rp.permission_id
 
-        ORDER BY u.userId
+        ORDER BY u."userId"
     </select>
 
     <select id="getAllRoles" resultType="com.alibaba.fastjson.JSONObject">
         SELECT
-            id        roleId,
-            role_name roleName
+            id        "roleId",
+            role_name "roleName"
         FROM sys_role
         WHERE delete_status='1'
     </select>
@@ -93,14 +93,14 @@
     </resultMap>
     <select id="listRole" resultMap="roleMap">
         SELECT
-            r.id              roleId,
-            r.role_name       roleName,
-            u.id              userId,
-            u.nickname        nickname,
-            p.id              permissionId,
-            p.menu_code       menuCode,
-            p.menu_name       menuName,
-            p.permission_name permissionName
+            r.id              "roleId",
+            r.role_name       "roleName",
+            u.id              "userId",
+            u.nickname        "nickname",
+            p.id              "permissionId",
+            p.menu_code       "menuCode",
+            p.menu_name       "menuName",
+            p.permission_name "permissionName"
         FROM sys_role r
             LEFT JOIN sys_user u ON r.id = u.role_id AND u.delete_status = '1'
             LEFT JOIN sys_role_permission rp ON r.id = rp.role_id AND rp.delete_status = '1'
@@ -118,10 +118,10 @@
     </resultMap>
     <select id="listAllPermission" resultMap="permissionMap">
         SELECT
-            p.id                  id,
-            p.menu_name           menuName,
-            p.permission_name     permissionName,
-            p.required_permission requiredPerm
+            p.id                  "id",
+            p.menu_name           "menuName",
+            p.permission_name     "permissionName",
+            p.required_permission "requiredPerm"
         FROM sys_permission p;
     </select>
 
@@ -151,10 +151,10 @@
     </resultMap>
     <select id="getRoleAllInfo" resultMap="aRole">
         SELECT
-            r.id        roleId,
-            r.role_name roleName,
-            u.id        userId,
-            p.id        permissionId
+            r.id        "roleId",
+            r.role_name "roleName",
+            u.id        "userId",
+            p.id        "permissionId"
         FROM sys_role r
             LEFT JOIN sys_user u ON r.id = u.role_id AND u.delete_status = '1'
             LEFT JOIN sys_role_permission rp ON r.id = rp.role_id AND rp.delete_status = '1'
